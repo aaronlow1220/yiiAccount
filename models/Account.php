@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * @OA\Schema(
@@ -24,6 +25,18 @@ use yii\db\ActiveRecord;
  */
 class Account extends ActiveRecord
 {
+    /**
+     * Use timestamp to store time of login, update and create.
+     *
+     * @return array<int, mixed>
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
+    }
+
     /**
      * Return table name of account_names.
      *
