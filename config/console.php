@@ -15,7 +15,6 @@ $config = [
     'components' => [
         'user' => [
             'class' => 'yii\web\User',
-            'identityClass' => 'app\components\auth\UserIdentity',
             'enableAutoLogin' => false,
             'enableSession' => false,
         ],
