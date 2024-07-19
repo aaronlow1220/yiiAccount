@@ -26,7 +26,7 @@ use yii\db\ActiveRecord;
  *   @OA\Property(property="updated_at", type="integer", description="unixtime", maxLength=10),
  * )
  */
-class Account extends ActiveRecord
+class AccountNames extends ActiveRecord
 {
     /**
      * Use timestamp to store time of login, update and create.
@@ -48,10 +48,12 @@ class Account extends ActiveRecord
     public function rules()
     {
         return [
-            [['serial_number', 'name', 'en_name', 'parent_id', 'count', 'level', 'is_debit', 'type', 'note'], 'trim'],
+            [['serial_number', 'name', 'en_name', 'parent_id', 'is_debit', 'type', 'note', 'is_need_purchase_order', 'for_statement'], 'trim'],
+            [['serial_number', 'name', 'en_name', 'parent_id', 'is_debit', 'type', 'note'], 'required'],
             [['serial_number', 'name', 'en_name', 'type', 'note'], 'string'],
+            ['serial_number', 'unique'],
             [['parent_id', 'count', 'level'], 'integer'],
-            [['is_debit', 'for_statement', 'is_need_to_purchase_order'], 'in', 'range' => ['0', '1']],
+            [['is_debit', 'for_statement', 'is_need_purchase_order'], 'in', 'range' => ['0', '1']],
         ];
     }
 

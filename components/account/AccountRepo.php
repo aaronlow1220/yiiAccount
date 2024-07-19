@@ -4,15 +4,16 @@ namespace app\components\account;
 
 use AtelliTech\Yii2\Utils\AbstractRepository;
 use app\components\enum\IsDebitEnum;
-use app\models\Account;
+use app\models\AccountNames;
 use yii\db\ActiveRecordInterface;
+use yii\db\ActiveRecord;
 
 class AccountRepo extends AbstractRepository
 {
     /**
      * @var string the model class name. This property must be set.
      */
-    protected string $modelClass = Account::class;
+    protected string $modelClass = AccountNames::class;
 
     /**
      * Get all accounts.
@@ -21,18 +22,18 @@ class AccountRepo extends AbstractRepository
      */
     public function getAllAccounts()
     {
-        return Account::find()->all();
+        return AccountNames::find()->all();
     }
 
     /**
      * Get account by id.
      *
      * @param int $id
-     * @return null|Account
+     * @return null|ActiveRecord
      */
     public function getAccountById($id)
     {
-        return Account::findOne($id);
+        return AccountNames::findOne($id);
     }
 
     /**
@@ -43,7 +44,7 @@ class AccountRepo extends AbstractRepository
      */
     public function getAccountBySerialNumber($serialNumber)
     {
-        return Account::find()->where(['serial_number' => $serialNumber])->one();
+        return AccountNames::find()->where(['serial_number' => $serialNumber])->one();
     }
 
     /**

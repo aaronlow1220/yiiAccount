@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
 /**
  * Account create service.
  */
-class AccountSearchService
+class AccountCreateService
 {
     /**
      * construct.
@@ -26,18 +26,25 @@ class AccountSearchService
      * @param array<string, mixed> $params
      * @return Activerecord
      */
-    public function createServiceProvider($params)
+    public function create($params)
     {
+        $parent = $this->accountRepo->getAccountById($params['parent_id']);
+        $parentCount = ['count' => $parent->count + 1];
+        $level = $parent->level + 1;
+
+
         $transaction = $this->accountRepo->getDb()->beginTransaction();
 
         try {
-            $user = $this->accountRepo->create($params);
+            $this->accountRepo->update($parent->id, $parentCount);
+            $params['count'] = 0;
+            $params['level'] = $level;
+            $account = $this->accountRepo->create($params);
             $transaction->commit();
 
-            return $user;
+            return $account;
         } catch (Exception $e) {
             $transaction->rollBack();
-
             throw $e;
         }
     }

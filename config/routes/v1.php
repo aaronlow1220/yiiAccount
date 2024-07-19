@@ -9,6 +9,7 @@ return [
         'except' => ['index', 'delete'],
         'extraPatterns' => [
             'POST search' => 'search',
+            'POST new-record'=> 'new-record',
         ],
     ],
 ];
