@@ -24,7 +24,7 @@ class AccountSearch extends ApiSearchModel
 
     /**
      * @var null|string[] debit values for search
-     * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/User/properties/debit"), default=null)
+     * @OA\Property(type="array", @OA\Items(ref="#/components/schemas/Account/properties/is_debit"), default=null)
      */
     public $IsDebitValue;
 

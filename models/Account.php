@@ -18,10 +18,13 @@ use yii\db\ActiveRecord;
  *   @OA\Property(property="count", type="integer", description="Number of next one layer child node", maxLength=10),
  *   @OA\Property(property="level", type="integer", description="Current node level in tree structure", maxLength=10),
  *   @OA\Property(property="is_debit", type="string", enum={"0", "1"}, description="Debit or credit 0: credit 1: debit", maxLength=10),
- *   @OA\Property(property="type", type="string", description="accounting type", maxLength=128),
+ *   @OA\Property(property="type", type="string", description="accounting type", maxLength=128, default=""),
  *   @OA\Property(property="note", type="string", description="note", maxLength=128),
+ *   @OA\Property(property="for_statement", type="string", enum={"0", "1"}, description="Whether statement is needed 0: no 1: yes", maxLength=10),
+ *   @OA\Property(property="is_need_purchase_order", type="string", enum={"0", "1"}, description="Whether purchase order is needed 0: no 1: yes", maxLength=10),
  *   @OA\Property(property="created_at", type="integer", description="unixtime", maxLength=10),
  *   @OA\Property(property="updated_at", type="integer", description="unixtime", maxLength=10),
+ * )
  */
 class Account extends ActiveRecord
 {
@@ -34,6 +37,21 @@ class Account extends ActiveRecord
     {
         return [
             TimestampBehavior::class,
+        ];
+    }
+
+    /**
+     * Define rules of account.
+     *
+     * @return array<int, mixed>
+     */
+    public function rules()
+    {
+        return [
+            [['serial_number', 'name', 'en_name', 'parent_id', 'count', 'level', 'is_debit', 'type', 'note'], 'trim'],
+            [['serial_number', 'name', 'en_name', 'type', 'note'], 'string'],
+            [['parent_id', 'count', 'level'], 'integer'],
+            [['is_debit', 'for_statement', 'is_need_to_purchase_order'], 'in', 'range' => ['0', '1']],
         ];
     }
 
