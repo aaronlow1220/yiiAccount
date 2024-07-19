@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @OA\Schema(
- *   schema="Account",
+ *   schema="AccountNames",
  *   title="Account Model",
  *   description="This model is used to store accounting information.",
  *   @OA\Property(property="id", type="integer", description="ID #autoIncrement #pk", maxLength=20),

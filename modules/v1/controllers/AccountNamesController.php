@@ -152,7 +152,7 @@ class AccountNamesController extends ActiveApiController
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
-     *              @OA\Property(property="_data", type="array", @OA\Items(ref="#/components/schemas/Account")),
+     *              @OA\Property(property="_data", type="array", @OA\Items(ref="#/components/schemas/AccountNames")),
      *              @OA\Property(property="_meta", type="object", ref="#/components/schemas/Pagination")
      *             )
      *         )
