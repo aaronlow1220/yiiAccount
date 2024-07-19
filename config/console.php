@@ -1,7 +1,7 @@
 <?php
 
-$params = require __DIR__ . '/params.php';
-$container = require __DIR__ . '/container.php';
+$params = require __DIR__.'/params.php';
+$container = require __DIR__.'/container.php';
 
 $config = [
     'id' => 'basic-console',
@@ -35,10 +35,10 @@ $config = [
         ],
         'genapi' => [
             'class' => 'AtelliTech\Yii2\Utils\ApiGeneratorController',
-            'db' => 'db' // db comopnent id default: db
+            'db' => 'db', // db comopnent id default: db
         ],
         'container' => [
-            'class' => 'AtelliTech\Yii2\Utils\ContainerController'
+            'class' => 'AtelliTech\Yii2\Utils\ContainerController',
         ],
     ],
     'container' => $container,

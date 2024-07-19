@@ -2,9 +2,9 @@
 
 use yii\web\Response;
 
-$params = require __DIR__ . '/params.php';
-$container = require __DIR__ . '/container.php';
-$urlManager = require __DIR__ . '/urlManager.php';
+$params = require __DIR__.'/params.php';
+$container = require __DIR__.'/container.php';
+$urlManager = require __DIR__.'/urlManager.php';
 
 $config = [
     'id' => 'basic',
@@ -46,7 +46,7 @@ $config = [
             'password' => $params['db']['password'],
             'charset' => 'utf8mb4',
         ],
-        'urlManager' => $urlManager
+        'urlManager' => $urlManager,
     ],
     'container' => $container,
     'params' => $params,

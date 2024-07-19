@@ -4,10 +4,12 @@ namespace v1\controllers;
 
 use Throwable;
 use v1\components\ActiveApiController;
-use yii\data\ActiveDataProvider;
-use yii\web\HttpException;
+use v1\components\account\AccountSearchService;
 use yii\base\InvalidArgumentException;
-use v1\components\account\AccountCreateService;
+use yii\base\Module;
+use yii\data\ActiveDataProvider;
+use yii\filters\auth\HttpBearerAuth;
+use yii\web\HttpException;
 
 /**
  * @OA\Tag(
@@ -188,17 +190,43 @@ use v1\components\account\AccountCreateService;
 class AccountNamesController extends ActiveApiController
 {
     /**
-     * @var string $modelClass
+     * @var string
      */
     public $modelClass = 'app\models\AccountNames';
 
-    public function __construct($id, $module, private AccountCreateService $accountCreateService, $config = [])
+    /**
+     * constructor.
+     *
+     * @param string $id
+     * @param Module $module
+     * @param AccountSearchService $accountSearchService
+     * @param array<string, mixed> $config
+     * @return void
+     */
+    public function __construct($id, $module, private AccountSearchService $accountSearchService, $config = [])
     {
         parent::__construct($id, $module, $config);
     }
 
     /**
-     * {@inherit}
+     * behaviors.
+     *
+     * @return array<string, mixed>
+     */
+    public function behaviors(): array
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::class,
+            'except' => ['search'],
+        ];
+
+        return $behaviors;
+    }
+
+    /**
+     * {@inherit}.
      *
      * @return array<string, mixed>
      */
@@ -206,14 +234,13 @@ class AccountNamesController extends ActiveApiController
     {
         $actions = parent::actions();
 
-        // customize the data provider preparation with the "prepareDataProvider()" method
         $actions['index']['dataFilter'] = [
             'class' => 'yii\data\ActiveDataFilter',
-            'searchModel' => $this->modelClass
+            'searchModel' => $this->modelClass,
         ];
 
         $actions['index']['pagination'] = [
-            'class' => 'v1\components\Pagination'
+            'class' => 'v1\components\Pagination',
         ];
 
         unset($actions['index']);
@@ -223,7 +250,7 @@ class AccountNamesController extends ActiveApiController
 
     /**
      * @OA\Post(
-     *     path="/account-names/search",
+     *     path="v1/account-names/search",
      *     summary="Search",
      *     description="Search AccountNames by particular params",
      *     operationId="searchAccountNames",
@@ -233,7 +260,7 @@ class AccountNamesController extends ActiveApiController
      *         required=false,
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *             @OA\Schema(ref="#/components/schemas/xxxxxSearchModel")
+     *             @OA\Schema(ref="#/components/schemas/AccountSearchModel")
      *         ),
      *     ),
      *     @OA\Response(
@@ -251,28 +278,18 @@ class AccountNamesController extends ActiveApiController
      *
      * Search AccountNames
      *
-     * @param xxxxxService $service
      * @return ActiveDataProvider
      */
-    // public function actionSearch(xxxxxService $service): ActiveDataProvider
-    // {
-    //     try {
-    //         $params = $this->getRequestParams();
-    //         $query = $service->createSearchQuery($params);
+    public function actionSearch(): ActiveDataProvider
+    {
+        try {
+            $params = $this->getRequestParams();
 
-    //         return new ActiveDataProvider([
-    //             'query' => &$query,
-    //             'pagination' => [
-    //                 'class' => 'v1\components\Pagination',
-    //                 'params' => $params
-    //             ],
-    //             'sort' => [
-    //                 'enableMultiSort' => true,
-    //                 'params' => $params
-    //             ]
-    //         ]);
-    //     } catch (Throwable $e) {
-    //         throw $e;
-    //     }
-    // }
+            return $this->accountSearchService->createDataProvider($params);
+        } catch (InvalidArgumentException $e) {
+            throw new HttpException(400, $e->getMessage());
+        } catch (Throwable $e) {
+            throw $e;
+        }
+    }
 }

@@ -2,10 +2,12 @@
 
 namespace v1\controllers;
 
-use Exception;
 use OpenApi\Annotations as OA;
+use OpenApi\Generator;
 use Yii;
-use yii\web\HttpException;
+use yii\helpers\Url;
+use yii\web\Controller;
+use yii\web\Response;
 
 /**
  * @OA\OpenApi(
@@ -32,33 +34,35 @@ use yii\web\HttpException;
  *     securityScheme="BearerAuth"
  * )
  */
-class OpenApiSpecController extends \yii\web\Controller
+class OpenApiSpecController extends Controller
 {
     /**
-     * display swagger yaml
+     * display swagger yaml.
      *
+     * @param Response $response
      * @param string $format default: yaml
-     * @return string|Response
+     * @return Response|string
      */
-    public function actionIndex(?string $format = null): string|Response
+    public function actionIndex(Response $response, ?string $format = null): Response|string
     {
         $modulePath = Yii::getAlias('@v1');
         $modelPath = Yii::getAlias('@app/models');
-        $openapi = \OpenApi\Generator::scan([$modulePath, $modelPath]);
-        if ($format == 'json') {
+        $openapi = Generator::scan([$modulePath, $modelPath]);
+        if ('json' == $format) {
             $contents = $openapi->toJson();
-            $this->response->format = Response::FORMAT_JSON;
-        } elseif ($format == 'yaml') {
+            $response->format = Response::FORMAT_JSON;
+        } elseif ('yaml' == $format) {
             $contents = $openapi->toYaml();
-            $this->response->headers->set('Content-Type', 'application/x-yaml');
+            $response->headers->set('Content-Type', 'application/x-yaml');
         } else {
             $viewFile = Yii::getAlias('@v1/views/view_apidoc.php');
-            $yamlUri = strstr(\yii\helpers\Url::to(['/apidoc', 'format'=>'yaml'], true), '//');
-            $contents = $this->view->renderFile($viewFile, ['yamlUri'=>$yamlUri]);
-            $this->response->format = Response::FORMAT_HTML;
+            $yamlUri = strstr(Url::to(['/apidoc', 'format' => 'yaml'], true), '//');
+            $contents = $this->view->renderFile($viewFile, ['yamlUri' => $yamlUri]);
+            $response->format = Response::FORMAT_HTML;
         }
 
-        $this->response->content = $contents;
-        return $this->response;
+        $response->content = $contents;
+
+        return $response;
     }
 }

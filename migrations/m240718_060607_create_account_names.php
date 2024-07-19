@@ -3,11 +3,10 @@
 use yii\db\Migration;
 
 /**
- * Class m240718_060607_create_account_names
+ * Class m240718_060607_create_account_names.
  */
 class m240718_060607_create_account_names extends Migration
 {
-
     /**
      * @var string
      */

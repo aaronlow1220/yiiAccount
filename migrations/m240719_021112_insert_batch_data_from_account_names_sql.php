@@ -3,7 +3,7 @@
 use yii\db\Migration;
 
 /**
- * Class m240719_021112_insert_batch_data_from_account_names_sql
+ * Class m240719_021112_insert_batch_data_from_account_names_sql.
  */
 class m240719_021112_insert_batch_data_from_account_names_sql extends Migration
 {
@@ -12,13 +12,14 @@ class m240719_021112_insert_batch_data_from_account_names_sql extends Migration
      */
     public function safeUp()
     {
-        $sqlFilePath = dirname(__DIR__, 1) . '/account_names.sql';
+        $sqlFilePath = dirname(__DIR__, 1).'/account_names.sql';
 
         if (file_exists($sqlFilePath)) {
             $sqlContent = file_get_contents($sqlFilePath);
             $this->execute($sqlContent);
         } else {
-            echo "SQL file not found: $sqlFilePath\n";
+            echo "SQL file not found: {$sqlFilePath}\n";
+
             return false;
         }
     }

@@ -5,8 +5,9 @@ namespace app\components\enum;
 use MyCLabs\Enum\Enum;
 
 /**
- * Debit Enum for is_debit
- * @package app\components\enum
+ * Debit Enum for is_debit.
+ *
+ * @extends  Enum<Action::*>
  */
 final class IsDebitEnum extends Enum
 {
