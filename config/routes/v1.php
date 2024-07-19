@@ -10,6 +10,7 @@ return [
         'extraPatterns' => [
             'POST search' => 'search',
             'POST new-record' => 'new-record',
+            'PATCH update-record/<id>' => 'update-record',
         ],
     ],
 ];
