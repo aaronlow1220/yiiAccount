@@ -29,6 +29,8 @@ class m240718_060607_create_account_names extends Migration
             'is_debit' => 'ENUM("0", "1") NOT NULL DEFAULT "1" COMMENT "0: 貸, 1: 借"',
             'type' => $this->string(128)->notNull()->comment('資料類型'),
             'note' => $this->string(128)->notNull()->comment('摘要'),
+            'for_statement' => 'ENUM("0", "1") NOT NULL DEFAULT "0" COMMENT "是否用在請款單 0: no 1: yes"',
+            'is_need_purchase_order' => 'ENUM("0", "1") NOT NULL DEFAULT "0" COMMENT "是否需要採購單 0: no 1: yes"',
             'created_at' => $this->integer(10)->unsigned()->notNull()->comment('unixtime'),
             'updated_at' => $this->integer(10)->unsigned()->notNull()->comment('unixtime'),
         ]);

@@ -10,7 +10,7 @@ $config = [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
     'aliases' => [
-        '@v1' => '@app/module/v1',
+        '@v1' => '@app/modules/v1',
     ],
     'components' => [
         'user' => [
