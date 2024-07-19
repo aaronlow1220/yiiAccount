@@ -4,14 +4,14 @@ namespace v1\controllers;
 
 use Throwable;
 use v1\components\ActiveApiController;
-use v1\components\account\AccountSearchService;
 use v1\components\account\AccountCreateService;
+use v1\components\account\AccountSearchService;
 use yii\base\InvalidArgumentException;
 use yii\base\Module;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveRecord;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\HttpException;
-use yii\db\ActiveRecord;
 
 /**
  * @OA\Tag(
@@ -32,6 +32,7 @@ class AccountNamesController extends ActiveApiController
      * @param string $id
      * @param Module $module
      * @param AccountSearchService $accountSearchService
+     * @param AccountCreateService $accountCreateService
      * @param array<string, mixed> $config
      * @return void
      */
@@ -123,6 +124,7 @@ class AccountNamesController extends ActiveApiController
     {
         try {
             $params = $this->getRequestParams();
+
             return $this->accountCreateService->create($params);
         } catch (Throwable $e) {
             throw $e;

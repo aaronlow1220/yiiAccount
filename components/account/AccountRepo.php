@@ -5,8 +5,8 @@ namespace app\components\account;
 use AtelliTech\Yii2\Utils\AbstractRepository;
 use app\components\enum\IsDebitEnum;
 use app\models\AccountNames;
-use yii\db\ActiveRecordInterface;
 use yii\db\ActiveRecord;
+use yii\db\ActiveRecordInterface;
 
 class AccountRepo extends AbstractRepository
 {
