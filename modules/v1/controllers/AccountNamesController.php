@@ -20,6 +20,26 @@ use yii\web\HttpException;
  *     name="AccountNames",
  *     description="Everything about your AccountNames",
  * )
+ *
+ * @OA\Get(
+ *     path="/account-names/{id}",
+ *     summary="Get",
+ *     description="Get account item by particular id",
+ *     operationId="getAccount",
+ *     tags={"AccountNames"},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="Account id",
+ *         required=true,
+ *         @OA\Schema(ref="#/components/schemas/AccountNames/properties/id")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(type="object", ref="#/components/schemas/AccountNames")
+ *     )
+ * )
  */
 class AccountNamesController extends ActiveApiController
 {
@@ -56,7 +76,8 @@ class AccountNamesController extends ActiveApiController
 
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::class,
-            'except' => ['search', 'new-record', 'update-record'],
+            // 'except' => ['search', 'new-record', 'update-record'],
+            'only' => ['new-record'],
         ];
 
         return $behaviors;
