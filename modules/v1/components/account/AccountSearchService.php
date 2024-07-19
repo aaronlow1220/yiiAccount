@@ -44,6 +44,10 @@ class AccountSearchService
             ]);
         }
 
+        if ($searchModel->IsDebitValue) {
+            $query->andFilterWhere(['is_debit'=> $searchModel->IsDebitValue]);
+        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => &$query,
             'pagination' => [
