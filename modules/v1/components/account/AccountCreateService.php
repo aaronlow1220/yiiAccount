@@ -16,7 +16,9 @@ class AccountCreateService
      *
      * @param AccountRepo $accountRepo
      */
-    public function __construct(private AccountRepo $accountRepo) {}
+    public function __construct(private AccountRepo $accountRepo)
+    {
+    }
 
     /**
      * create search query.
@@ -26,14 +28,21 @@ class AccountCreateService
      */
     public function create($params)
     {
-        $parent = $this->accountRepo->getAccountById($params['parent_id']);
-        $parentCount = ['count' => $parent['count'] + 1];
-        $level = $parent['level'] + 1;
+        $parentCount = 0;
+        $parent = null;
+        $level = 1;
+        if (isset($params['parent_id']) && $params['parent_id'] != 0) {
+            $parent = $this->accountRepo->getAccountById($params['parent_id']);
+            $parentCount = ['count' => $parent['count'] + 1];
+            $level = $parent['level'] + 1;
+        }
 
         $transaction = $this->accountRepo->getDb()->beginTransaction();
 
         try {
-            $this->accountRepo->update($parent['id'], $parentCount);
+            if($parent) {
+                $this->accountRepo->update($parent['id'], $parentCount);
+            }
             $params['count'] = 0;
             $params['level'] = $level;
             $account = $this->accountRepo->create($params);
