@@ -11,7 +11,6 @@ use yii\web\Response;
 
 /**
  * @OA\OpenApi(
- *     security={{"BearerAuth": {}}},
  *     @OA\Server(
  *         url="http://localhost:8080/",
  *         description="[Dev] APIs server"
