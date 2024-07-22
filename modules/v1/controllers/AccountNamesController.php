@@ -76,8 +76,8 @@ class AccountNamesController extends ActiveApiController
 
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::class,
-            // 'except' => ['search', 'new-record', 'update-record'],
-            'only' => ['new-record'],
+            'except' => ['search', 'new-record', 'update-record'],
+            // 'only' => [''],
         ];
 
         return $behaviors;
