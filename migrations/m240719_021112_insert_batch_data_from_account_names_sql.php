@@ -14,7 +14,7 @@ class m240719_021112_insert_batch_data_from_account_names_sql extends Migration
     {
         $columns = ['id', 'serial_number', 'name', 'en_name', 'parent_id', 'count', 'is_debit', 'type', 'level', 'note', 'created_at', 'updated_at', 'for_statement', 'is_need_purchase_order'];
         $data = [
-            [1, '1', '資產', 'Assets', null, 2, '1', '流動資產', 1, '統治大項科目', 1539678692, 1539678694, '0', '0'],
+            [1, '1', '資產', 'Assets', 0, 2, '1', '流動資產', 1, '統治大項科目', 1539678692, 1539678694, '0', '0'],
             [2, '11-12', '流動資產', 'Current assets', 1, 17, '1', '流動資產', 2, '統治大項科目', 1539678692, 1539678694, '0', '0'],
             [3, '1110-1120', '現金及約當現金', 'Cash and Cash Equivalents', 2, 0, '1', '流動資產', 3, '統治大項科目', 1539678692, 1539678694, '0', '0'],
             [4, '1110', '現金', '', 2, 1, '1', '流動資產', 3, '統治大項科目', 1539678692, 1539678694, '0', '0'],
