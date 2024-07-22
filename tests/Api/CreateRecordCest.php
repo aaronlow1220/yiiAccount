@@ -12,8 +12,8 @@ class CreateRecordCest
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPOST('/new-record', [
             "serial_number" => "71266",
-            "name" => "現金及約當現金fb",
-            "en_name" => "Cash and Cash Equivsdfalentsfbqwe",
+            "name" => "現金",
+            "en_name" => "Cash",
             "parent_id" => 3,
             "is_debit" => "1",
             "type" => "流動資產",
@@ -25,8 +25,8 @@ class CreateRecordCest
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
             "serial_number" => "71266",
-            "name" => "現金及約當現金fb",
-            "en_name" => "Cash and Cash Equivsdfalentsfbqwe",
+            "name" => "現金",
+            "en_name" => "Cash",
             "parent_id" => "3",
             "is_debit" => "1",
             "type" => "流動資產",
