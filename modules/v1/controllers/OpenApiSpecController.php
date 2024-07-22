@@ -13,7 +13,7 @@ use yii\web\Response;
  * @OA\OpenApi(
  *     security={{"BearerAuth": {}}},
  *     @OA\Server(
- *         url="https://api.xxx.com",
+ *         url="http://localhost:8080/",
  *         description="[Dev] APIs server"
  *     ),
  *     @OA\Info(
@@ -26,13 +26,6 @@ use yii\web\Response;
  *     ),
  * )
  *
- * @OA\SecurityScheme(
- *     type="http",
- *     scheme="bearer",
- *     in="header",
- *     description="Authentication(Based on User Token): Bearer {Access Token}",
- *     securityScheme="BearerAuth"
- * )
  */
 class OpenApiSpecController extends Controller
 {

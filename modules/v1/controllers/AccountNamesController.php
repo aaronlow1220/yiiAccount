@@ -22,7 +22,7 @@ use yii\web\HttpException;
  * )
  *
  * @OA\Get(
- *     path="/account-names/{id}",
+ *     path="/v1/account-names/{id}",
  *     summary="Get",
  *     description="Get account item by particular id",
  *     operationId="getAccount",
@@ -108,7 +108,7 @@ class AccountNamesController extends ActiveApiController
 
     /**
      * @OA\Post(
-     *     path="v1/account-names/new-record",
+     *     path="/v1/account-names/new-record",
      *     summary="Create new record",
      *     description="Create new record",
      *     operationId="newRecord",
@@ -158,7 +158,7 @@ class AccountNamesController extends ActiveApiController
 
     /**
      * @OA\PATCH(
-     *     path="v1/account-names/update-record/{id}",
+     *     path="/v1/account-names/update-record/{id}",
      *     summary="Update record",
      *     description="Update record",
      *     operationId="updateRecord",
@@ -211,7 +211,7 @@ class AccountNamesController extends ActiveApiController
 
     /**
      * @OA\Post(
-     *     path="v1/account-names/search",
+     *     path="/v1/account-names/search",
      *     summary="Search",
      *     description="Search AccountNames by particular params",
      *     operationId="searchAccountNames",
