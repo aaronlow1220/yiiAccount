@@ -18,9 +18,7 @@ class AccountUpdateService
      * @param AccountRepo $accountRepo
      * @return void
      */
-    public function __construct(private AccountRepo $accountRepo)
-    {
-    }
+    public function __construct(private AccountRepo $accountRepo) {}
 
     /**
      * Update an account.
@@ -31,7 +29,7 @@ class AccountUpdateService
      */
     public function update($account, $params)
     {
-        if ($account == null) {
+        if (null == $account) {
             throw new HttpException(404, 'Account not found');
         }
 
