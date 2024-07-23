@@ -8,6 +8,7 @@ use app\components\account\AccountRepo;
 use v1\components\account\AccountCreateService;
 use yii\db\ActiveRecord;
 use yii\db\Connection;
+use yii\db\Exception;
 use yii\db\Transaction;
 
 /**
@@ -133,6 +134,35 @@ class CreateAccountTest extends Unit
         $result = $this->service->create($params);
 
         $this->assertEquals($expected, $result->toArray());
+    }
+
+    public function testCreateThrowException()
+    {
+        $params = ['parent_id' => 1, 'name' => 'Child Account'];
+
+        $parentAccount = ['id' => 1, 'count' => 5, 'level' => 1];
+
+        $this->accountRepo->method('getAccountById')
+            ->with(1)
+            ->willReturn($parentAccount);
+
+        $transaction = $this->createMock(Transaction::class);
+        $transaction->expects($this->never())->method('commit');
+        $transaction->expects($this->once())->method('rollBack');
+
+        $this->accountRepo->method('getDb')
+            ->willReturn(Stub::makeEmpty(Connection::class, ['beginTransaction' => $transaction]));
+
+        $this->accountRepo->method('update')
+            ->with($params['parent_id'], ['count' => $parentAccount['count'] + 1]);
+
+        $this->accountRepo->method('create')
+            ->willThrowException(new Exception('Test exception'));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Test exception');
+
+        $this->service->create($params);
     }
 
     protected function _before()
