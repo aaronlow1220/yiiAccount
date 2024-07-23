@@ -16,7 +16,6 @@ use yii\db\Transaction;
  */
 class CreateAccountTest extends Unit
 {
-    protected $tester;
     protected $accountRepo;
     protected $service;
 

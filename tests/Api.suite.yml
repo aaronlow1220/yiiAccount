@@ -1,6 +1,0 @@
-actor: ApiTester
-modules:
-    enabled: 
-        - REST:
-            url: /v1/account-names/
-            depends: Yii2
