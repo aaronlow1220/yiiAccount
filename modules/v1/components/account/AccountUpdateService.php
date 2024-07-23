@@ -29,26 +29,31 @@ class AccountUpdateService
      */
     public function update($account, $params)
     {
+        $parentIdInParams = isset($params['parent_id']);
         $parent = $this->accountRepo->getAccountById($account['parent_id']);
-        $newParent = $this->accountRepo->getAccountById($params['parent_id']);
-        $count = ['count' => $parent['count']];
-        if (isset($params['parent_id']) && 0 != $account['count']) {
-            throw new HttpException(403, 'Cannot change parent_id when count is not 0');
-        }
+        $parentCount = ['count' => $parent['count']];
+        $newParent = null;
 
-        if (isset($params['parent_id']) && $params['parent_id'] == $account['id']) {
-            throw new HttpException(403, 'Cannot set parent_id to self');
+        // With parent_id in params
+        if ($parentIdInParams) {
+            if ($params['parent_id'] == $account['id']) {
+                throw new HttpException(403, 'Cannot set parent_id to self');
+            }
+            if (0 != $account['count']) {
+                throw new HttpException(403, 'Child node exists, cannot change parent_id');
+            }
+            $newParent = $this->accountRepo->getAccountById($params['parent_id']);
+            --$parentCount['count'];
         }
 
         $transaction = $this->accountRepo->getDb()->beginTransaction();
 
         try {
-            if (isset($params['parent_id']) && $params['parent_id'] != $account['parent_id']) {
-                --$count['count'];
+            if ($parentIdInParams) {
                 $params['level'] = $newParent['level'] + 1;
                 $this->accountRepo->update($newParent['id'], ['count' => $newParent['count'] + 1]);
             }
-            $this->accountRepo->update($parent['id'], $count);
+
             $account = $this->accountRepo->update($account['id'], $params);
             $transaction->commit();
 

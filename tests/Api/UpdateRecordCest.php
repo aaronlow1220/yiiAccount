@@ -1,9 +1,8 @@
 <?php
 
-
 namespace Api;
 
-use \ApiTester;
+use ApiTester;
 
 class UpdateRecordCest
 {

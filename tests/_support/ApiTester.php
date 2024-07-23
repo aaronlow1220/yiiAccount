@@ -1,10 +1,12 @@
 <?php
 
 declare(strict_types=1);
-
+use Codeception\Actor;
+use _generated\ApiTesterActions;
 
 /**
- * Inherited Methods
+ * Inherited Methods.
+ *
  * @method void wantTo($text)
  * @method void wantToTest($text)
  * @method void execute($callable)
@@ -17,12 +19,12 @@ declare(strict_types=1);
  * @method void pause($vars = [])
  *
  * @SuppressWarnings(PHPMD)
-*/
-class ApiTester extends \Codeception\Actor
+ */
+class ApiTester extends Actor
 {
-    use _generated\ApiTesterActions;
+    use ApiTesterActions;
 
     /**
-     * Define custom actions here
+     * Define custom actions here.
      */
 }
