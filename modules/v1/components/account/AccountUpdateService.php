@@ -18,7 +18,9 @@ class AccountUpdateService
      * @param AccountRepo $accountRepo
      * @return void
      */
-    public function __construct(private AccountRepo $accountRepo) {}
+    public function __construct(private AccountRepo $accountRepo)
+    {
+    }
 
     /**
      * Update an account.
@@ -29,6 +31,10 @@ class AccountUpdateService
      */
     public function update($account, $params)
     {
+        if ($account == null) {
+            throw new HttpException(404, 'Account not found');
+        }
+
         $parentIdInParams = isset($params['parent_id']);
         $parent = $this->accountRepo->getAccountById($account['parent_id']);
         $parentCount = ['count' => $parent['count']];
