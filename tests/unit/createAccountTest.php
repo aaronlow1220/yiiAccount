@@ -81,7 +81,8 @@ class CreateAccountTest extends Unit
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testCreateWithoutParentId(){
+    public function testCreateWithoutParentId()
+    {
         $params = [
             'name' => '現金及約當現金fb',
             'en_name' => 'Cash and Cash Equivsdfalentsfbqwe',
