@@ -23,6 +23,7 @@ class CreateAccountTest extends Unit
     public function testCreateWithParentId()
     {
         $params = [
+            'serial_number' => '225013',
             'name' => '現金及約當現金fb',
             'en_name' => 'Cash and Cash Equivsdfalentsfbqwe',
             'parent_id' => 1,
@@ -34,6 +35,7 @@ class CreateAccountTest extends Unit
         ];
 
         $expected = [
+            'serial_number' => '225013',
             'name' => '現金及約當現金fb',
             'en_name' => 'Cash and Cash Equivsdfalentsfbqwe',
             'parent_id' => 1,
