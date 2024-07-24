@@ -18,9 +18,7 @@ class AccountUpdateService
      * @param AccountRepo $accountRepo
      * @return void
      */
-    public function __construct(private AccountRepo $accountRepo)
-    {
-    }
+    public function __construct(private AccountRepo $accountRepo) {}
 
     /**
      * Update an account.
