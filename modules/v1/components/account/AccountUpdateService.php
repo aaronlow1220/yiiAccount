@@ -18,12 +18,14 @@ class AccountUpdateService
      * @param AccountRepo $accountRepo
      * @return void
      */
-    public function __construct(private AccountRepo $accountRepo) {}
+    public function __construct(private AccountRepo $accountRepo)
+    {
+    }
 
     /**
      * Update an account.
      *
-     * @param ActiveRecord $account
+     * @param array<string, mixed> $account
      * @param array<string, mixed> $params
      * @return ActiveRecord
      */
@@ -35,7 +37,6 @@ class AccountUpdateService
 
         $parentIdInParams = isset($params['parent_id']);
         $parent = $this->accountRepo->getAccountById($account['parent_id']);
-        $parentCount = ['count' => $parent['count']];
         $newParent = null;
 
         // With parent_id in params
@@ -47,7 +48,6 @@ class AccountUpdateService
                 throw new HttpException(403, 'Child node exists, cannot change parent_id');
             }
             $newParent = $this->accountRepo->getAccountById($params['parent_id']);
-            --$parentCount['count'];
         }
 
         $transaction = $this->accountRepo->getDb()->beginTransaction();
@@ -56,6 +56,7 @@ class AccountUpdateService
             if ($parentIdInParams) {
                 $params['level'] = $newParent['level'] + 1;
                 $this->accountRepo->update($newParent['id'], ['count' => $newParent['count'] + 1]);
+                $this->accountRepo->update($parent['id'], ['count' => $parent['count'] - 1]);
             }
 
             $account = $this->accountRepo->update($account['id'], $params);

@@ -203,7 +203,7 @@ class AccountNamesController extends ActiveApiController
             $params = $this->getRequestParams();
             $account = $this->accountRepo->getAccountById($id);
 
-            return $this->accountUpdateService->update($account, $params);
+            return $this->accountUpdateService->update($account->toArray(), $params);
         } catch (Throwable $e) {
             throw $e;
         }
