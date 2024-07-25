@@ -14,7 +14,7 @@ use yii\db\Transaction;
  * @internal
  * @coversNothing
  */
-class updateAccountTest extends Unit
+class UpdateAccountTest extends Unit
 {
     protected $accountRepo;
     protected $service;
