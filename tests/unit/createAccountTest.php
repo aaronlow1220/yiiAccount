@@ -85,6 +85,7 @@ class CreateAccountTest extends Unit
 
         // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
+            // To check for return of getAccountById to return parent account.
             'getAccountById' => function ($id) use ($parentAccount) {
                 if (1 === $id) {
                     return $parentAccount;
@@ -92,6 +93,7 @@ class CreateAccountTest extends Unit
 
                 return null;
             },
+            // To check for commit and rollback. Commit should be called once and rollback should not be called.
             'getDb' => Stub::make(Connection::class, [
                 'beginTransaction' => Stub::make(Transaction::class, [
                     'commit' => Expected::once(),
@@ -138,6 +140,7 @@ class CreateAccountTest extends Unit
 
         // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
+            // To check for commit and rollback. Commit should be called once and rollback should not be called.
             'getDb' => Stub::make(Connection::class, [
                 'beginTransaction' => Stub::make(Transaction::class, [
                     'commit' => Expected::once(),
@@ -163,6 +166,7 @@ class CreateAccountTest extends Unit
 
         // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
+            // To check for return of getAccountById to return parent account.
             'getAccountById' => function ($id) use ($parentAccount) {
                 if (1 === $id) {
                     return $parentAccount;
@@ -170,6 +174,7 @@ class CreateAccountTest extends Unit
 
                 return null;
             },
+            // To check for commit and rollback. Commit should not be called and rollback should be called once.
             'getDb' => Stub::make(Connection::class, [
                 'beginTransaction' => Stub::make(Transaction::class, [
                     'commit' => Expected::never(),
@@ -178,6 +183,7 @@ class CreateAccountTest extends Unit
             ]),
         ]);
 
+        // Expect exception to be thrown with message.
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Serial Number cannot be blank. En Name cannot be blank. Type cannot be blank. Note cannot be blank.');
 

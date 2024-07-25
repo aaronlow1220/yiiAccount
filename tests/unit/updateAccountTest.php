@@ -126,6 +126,7 @@ class UpdateAccountTest extends Unit
 
         // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
+            // To check for return of getAccountById to return parent account and new parent account. 16 is the old parent_id and 3 is the new parent_id.
             'getAccountById' => function ($id) use ($parentAccount, $newParentAccount) {
                 if (16 === $id) {
                     return $parentAccount;
@@ -136,13 +137,7 @@ class UpdateAccountTest extends Unit
 
                 return null;
             },
-            'update' => function ($id, $params) use ($expected) {
-                if (1 === $id) {
-                    return $expected;
-                }
-
-                return null;
-            },
+            // To check for commit and rollback. Commit should be called once and rollback should not be called.
             'getDb' => Stub::make(Connection::class, [
                 'beginTransaction' => Stub::make(Transaction::class, [
                     'commit' => Expected::once(),
@@ -218,6 +213,7 @@ class UpdateAccountTest extends Unit
 
         // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
+            // To check for return of getAccountById to return parent account.
             'getAccountById' => function ($id) use ($parentAccount) {
                 if (2 === $id) {
                     return $parentAccount;
@@ -225,13 +221,7 @@ class UpdateAccountTest extends Unit
 
                 return null;
             },
-            'update' => function ($id, $params) use ($expected) {
-                if (1 === $id) {
-                    return $expected;
-                }
-
-                return null;
-            },
+            // To check for commit and rollback. Commit should be called once and rollback should not be called.
             'getDb' => Stub::make(Connection::class, [
                 'beginTransaction' => Stub::make(Transaction::class, [
                     'commit' => Expected::once(),
@@ -308,6 +298,7 @@ class UpdateAccountTest extends Unit
 
         // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
+            // To check for return of getAccountById to return parent account.
             'getAccountById' => function ($id) use ($parentAccount) {
                 if (2 === $id) {
                     return $parentAccount;
@@ -315,13 +306,7 @@ class UpdateAccountTest extends Unit
 
                 return null;
             },
-            'update' => function ($id, $params) use ($expected) {
-                if (1 === $id) {
-                    return $expected;
-                }
-
-                return null;
-            },
+            // To check for commit and rollback. Commit should not be called and rollback should be called once.
             'getDb' => Stub::make(Connection::class, [
                 'beginTransaction' => Stub::make(Transaction::class, [
                     'commit' => Expected::never(),
@@ -330,6 +315,7 @@ class UpdateAccountTest extends Unit
             ]),
         ]);
 
+        // Expect exception to be thrown with message.
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Child node exists, cannot change parent_id');
 
