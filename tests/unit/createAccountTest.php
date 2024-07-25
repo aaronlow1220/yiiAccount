@@ -8,18 +8,39 @@ use Codeception\Test\Unit;
 use Exception;
 use app\components\account\AccountRepo;
 use v1\components\account\AccountCreateService;
+use yii\db\ActiveRecord;
 use yii\db\Connection;
 use yii\db\Transaction;
 
 /**
+ * Test for AccountCreateService.
+ *
  * @internal
  * @coversNothing
  */
 class CreateAccountTest extends Unit
 {
+    /**
+     * @var AccountRepo
+     */
     protected $accountRepo;
+
+    /**
+     * @var AccountCreateService
+     */
     protected $service;
 
+    /**
+     * Unset attributes from array or ActiveRecord.
+     *
+     * To not compare attributes that are not needed.
+     * For example: id, created_at, updated_at.
+     * They dynamically change and are not needed for comparison.
+     *
+     * @param ActiveRecord|array<string, mixed> $array
+     * @param array<string, mixed> $attributes
+     * @return ActiveRecord|array<string, mixed>
+     */
     public function unsetAttributes($array, $attributes)
     {
         foreach ($attributes as $attribute) {
@@ -29,6 +50,9 @@ class CreateAccountTest extends Unit
         return $array;
     }
 
+    /**
+     * Test create account with parent id.
+     */
     public function testCreateWithParentId()
     {
         $params = [
@@ -59,6 +83,7 @@ class CreateAccountTest extends Unit
 
         $parentAccount = ['id' => 1, 'count' => 5, 'level' => 1];
 
+        // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
             'getAccountById' => function ($id) use ($parentAccount) {
                 if (1 === $id) {
@@ -81,6 +106,9 @@ class CreateAccountTest extends Unit
         $this->assertEquals($expected, $result->toArray());
     }
 
+    /**
+     * Test create account without parent id, default to parent_id 0.
+     */
     public function testCreateWithoutParentId()
     {
         $params = [
@@ -108,6 +136,7 @@ class CreateAccountTest extends Unit
             'is_need_purchase_order' => '0',
         ];
 
+        // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
             'getDb' => Stub::make(Connection::class, [
                 'beginTransaction' => Stub::make(Transaction::class, [
@@ -123,11 +152,16 @@ class CreateAccountTest extends Unit
         $this->assertEquals($expected, $result->toArray());
     }
 
+    /**
+     * Test create account to throw exception with missing field.
+     */
     public function testCreateThrowException()
     {
         $params = ['parent_id' => 1, 'name' => 'Child Account'];
 
         $parentAccount = ['id' => 1, 'count' => 5, 'level' => 1];
+
+        // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
             'getAccountById' => function ($id) use ($parentAccount) {
                 if (1 === $id) {
@@ -150,6 +184,9 @@ class CreateAccountTest extends Unit
         $this->service->create($params);
     }
 
+    /*
+     * before test.
+     */
     protected function _before()
     {
         $this->accountRepo = $this->make(AccountRepo::class);

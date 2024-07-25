@@ -3,6 +3,7 @@
 namespace Unit;
 
 use Codeception\Test\Unit;
+use app\components\account\AccountRepo;
 
 /**
  * @internal
@@ -10,12 +11,31 @@ use Codeception\Test\Unit;
  */
 class DeleteAccountTest extends Unit
 {
+    /**
+     * @var AccountRepo
+     */
     protected $accountRepo;
+
+    /**
+     * @var
+     */
     protected $service;
 
+    /**
+     * Test delete account success.
+     */
     public function testDeleteSuccess() {}
 
+    /**
+     * Test delete account fail.
+     */
     public function testDeleteFail() {}
 
-    protected function _before() {}
+    /*
+     * before test.
+     */
+    protected function _before()
+    {
+        $this->accountRepo = $this->make(AccountRepo::class);
+    }
 }

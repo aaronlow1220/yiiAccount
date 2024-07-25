@@ -8,6 +8,7 @@ use Codeception\Test\Unit;
 use Exception;
 use app\components\account\AccountRepo;
 use v1\components\account\AccountUpdateService;
+use yii\db\ActiveRecord;
 use yii\db\Connection;
 use yii\db\Transaction;
 
@@ -17,9 +18,27 @@ use yii\db\Transaction;
  */
 class UpdateAccountTest extends Unit
 {
+    /**
+     * @var AccountRepo
+     */
     protected $accountRepo;
+
+    /**
+     * @var AccountUpdateService
+     */
     protected $service;
 
+    /**
+     * Unset attributes from array or ActiveRecord.
+     *
+     * To not compare attributes that are not needed.
+     * For example: id, created_at, updated_at.
+     * They dynamically change and are not needed for comparison.
+     *
+     * @param ActiveRecord|array<string, mixed> $array
+     * @param array<string, mixed> $attributes
+     * @return ActiveRecord|array<string, mixed>
+     */
     public function unsetAttributes($array, $attributes)
     {
         foreach ($attributes as $attribute) {
@@ -29,6 +48,9 @@ class UpdateAccountTest extends Unit
         return $array;
     }
 
+    /**
+     * Test update account success with parent id.
+     */
     public function testUpdateSuccessWithParentId()
     {
         $params = [
@@ -101,6 +123,8 @@ class UpdateAccountTest extends Unit
             'for_statement' => '0',
             'is_need_purchase_order' => '0',
         ];
+
+        // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
             'getAccountById' => function ($id) use ($parentAccount, $newParentAccount) {
                 if (16 === $id) {
@@ -132,6 +156,9 @@ class UpdateAccountTest extends Unit
         $this->assertEquals($expected, $result->toArray());
     }
 
+    /**
+     * Test update account success with previous parent_id.
+     */
     public function testUpdateWithoutParentId()
     {
         $params = [
@@ -189,6 +216,7 @@ class UpdateAccountTest extends Unit
             'is_need_purchase_order' => '0',
         ];
 
+        // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
             'getAccountById' => function ($id) use ($parentAccount) {
                 if (2 === $id) {
@@ -217,6 +245,9 @@ class UpdateAccountTest extends Unit
         $this->assertEquals($expected, $result->toArray());
     }
 
+    /**
+     * Test update account throw exception when child node exist.
+     */
     public function testUpdateThrowException()
     {
         $params = [
@@ -275,6 +306,7 @@ class UpdateAccountTest extends Unit
             'is_need_purchase_order' => '0',
         ];
 
+        // Stub the AccountRepo class functions used.
         $this->accountRepo = Stub::make(AccountRepo::class, [
             'getAccountById' => function ($id) use ($parentAccount) {
                 if (2 === $id) {
@@ -304,6 +336,9 @@ class UpdateAccountTest extends Unit
         $result = $this->service->update($account, $params);
     }
 
+    /**
+     * before test.
+     */
     protected function _before()
     {
         $this->accountRepo = Stub::make(AccountRepo::class);
