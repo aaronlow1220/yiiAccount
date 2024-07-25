@@ -19,9 +19,11 @@ class UpdateAccountTest extends Unit
     protected $accountRepo;
     protected $service;
 
-    public function unsetTime($array)
+    public function unsetAttributes($array, $attributes)
     {
-        unset($array['created_at'], $array['updated_at']);
+        foreach ($attributes as $attribute) {
+            unset($array[$attribute]);
+        }
 
         return $array;
     }
@@ -124,7 +126,7 @@ class UpdateAccountTest extends Unit
             ]),
         ]);
 
-        $result = $this->unsetTime($this->service->update($account, $params));
+        $result = $this->unsetAttributes($this->service->update($account, $params), ['created_at', 'updated_at']);
 
         $this->assertEquals($expected, $result->toArray());
     }
@@ -209,7 +211,7 @@ class UpdateAccountTest extends Unit
             ]),
         ]);
 
-        $result = $this->unsetTime($this->service->update($account, $params));
+        $result = $this->unsetAttributes($this->service->update($account, $params), ['created_at', 'updated_at']);
 
         $this->assertEquals($expected, $result->toArray());
     }
