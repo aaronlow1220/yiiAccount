@@ -1,25 +1,21 @@
 <?php
 
-
 namespace Unit;
 
-use \UnitTester;
-use \Codeception\Test\Unit;
+use Codeception\Test\Unit;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class DeleteAccountTest extends Unit
 {
     protected $accountRepo;
     protected $service;
 
-    protected function _before()
-    {
-    }
+    public function testDeleteSuccess() {}
 
-    public function testDeleteSuccess()
-    {
-    }
+    public function testDeleteFail() {}
 
-    public function testDeleteFail()
-    {
-    }
+    protected function _before() {}
 }
