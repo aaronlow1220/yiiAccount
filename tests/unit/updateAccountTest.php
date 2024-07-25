@@ -5,6 +5,7 @@ namespace Unit;
 use Codeception\Stub;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
+use Exception;
 use app\components\account\AccountRepo;
 use v1\components\account\AccountUpdateService;
 use yii\db\Connection;
@@ -214,6 +215,93 @@ class UpdateAccountTest extends Unit
         $result = $this->unsetAttributes($this->service->update($account, $params), ['created_at', 'updated_at']);
 
         $this->assertEquals($expected, $result->toArray());
+    }
+
+    public function testUpdateThrowException()
+    {
+        $params = [
+            'name' => '流動資產',
+            'en_name' => 'Current assets',
+            'is_debit' => '1',
+            'parent_id' => 3,
+            'type' => '流動資產',
+            'note' => 'test',
+            'for_statement' => '0',
+            'is_need_purchase_order' => '0',
+        ];
+
+        $account = [
+            'id' => 20,
+            'serial_number' => '1150',
+            'name' => '以成本衡量之金融資產-流動',
+            'en_name' => 'Financial assets at cost-current',
+            'parent_id' => 2,
+            'count' => 2,
+            'level' => 3,
+            'is_debit' => '1',
+            'type' => '流動資產',
+            'note' => '統治大項科目',
+            'for_statement' => '0',
+            'is_need_purchase_order' => '0',
+        ];
+
+        $parentAccount = [
+            'id' => 2,
+            'serial_number' => '11-12',
+            'name' => '流動資產',
+            'en_name' => 'Current assets',
+            'parent_id' => 1,
+            'count' => 17,
+            'level' => 2,
+            'is_debit' => '1',
+            'type' => '流動資產',
+            'note' => '統治大項科目',
+            'for_statement' => '0',
+            'is_need_purchase_order' => '0',
+        ];
+
+        $expected = [
+            'id' => 20,
+            'serial_number' => '1150',
+            'name' => '流動資產',
+            'en_name' => 'Current assets',
+            'parent_id' => 2,
+            'count' => 2,
+            'level' => 3,
+            'is_debit' => '1',
+            'type' => '流動資產',
+            'note' => 'test',
+            'for_statement' => '0',
+            'is_need_purchase_order' => '0',
+        ];
+
+        $this->accountRepo = Stub::make(AccountRepo::class, [
+            'getAccountById' => function ($id) use ($parentAccount) {
+                if (2 === $id) {
+                    return $parentAccount;
+                }
+
+                return null;
+            },
+            'update' => function ($id, $params) use ($expected) {
+                if (1 === $id) {
+                    return $expected;
+                }
+
+                return null;
+            },
+            'getDb' => Stub::make(Connection::class, [
+                'beginTransaction' => Stub::make(Transaction::class, [
+                    'commit' => Expected::never(),
+                    'rollBack' => Expected::once(),
+                ]),
+            ]),
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Child node exists, cannot change parent_id');
+
+        $result = $this->service->update($account, $params);
     }
 
     protected function _before()
